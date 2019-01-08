@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         appBar.bringToFront()
-
+        TypefaceUtil.overrideFont(applicationContext, "SERIF", "fonts/googlesans_medium.ttf") // font from assets: "assets/fonts/Roboto-Regular.ttf
         flag = false
         pref = getSharedPreferences(getString(R.string.key_notification_check), Context.MODE_PRIVATE)
         val editor = pref.edit()
@@ -62,14 +62,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         logo_imageView.scaleType = ImageView.ScaleType.FIT_XY
 
         // Verifies if CodeX is absent on the device
-        if (!KERNEL_VERSION_FULL.contains("CodeX")) {
+        if (KERNEL_VERSION_FULL.contains("CodeX")) {
             alertUser()
         } else {
             // Runtime.getRuntime().exec("su")
             preferences = PreferenceManager.getDefaultSharedPreferences(this)
 
-            if(preferences.getBoolean(getString(R.string.key_miui_check), false))
-                flag  = true
+            if (preferences.getBoolean(getString(R.string.key_miui_check), false))
+                flag = true
             Log.e("flag: ", "$flag")
             isStoragePermissionGranted()
             device_textView.text = Html.fromHtml("<b>" + getString(R.string.device) + "</b>" + " " + Build.DEVICE)
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         val gson = GsonBuilder().create()
                         val codexData = gson.fromJson(bodyOfJSON, CodexInfo::class.java)
                         val url: String
-                        if(flag)
+                        if (flag)
                             url = "Okay MIUI URL set!"
                         else
                             url = codexData.downloads.url
@@ -157,7 +157,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             val gson = GsonBuilder().create()
                             val codexData = gson.fromJson(bodyOfJSON, CodexInfo::class.java)
                             val url: String
-                            if(flag)
+                            if (flag)
                                 url = "Okay MIUI URL set!"
                             else
                                 url = codexData.downloads.url
@@ -260,7 +260,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.d("currentVersion: ", currentVersion)
         val remoteVersion = version.substring(1, version.length)
         Log.d("remoteVersion: ", remoteVersion)
-        if (currentVersion.toDouble() < remoteVersion.toDouble()) {
+        if (/*currentVersion.toDouble()*/1.2 < remoteVersion.toDouble()) {
             runOnUiThread {
                 if (pref.getString("notification", "0").equals("0"))
                     updateNotification()
@@ -280,7 +280,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                         val gson = GsonBuilder().create()
                                         val codexData = gson.fromJson(bodyOfJSON, CodexInfo::class.java)
                                         val url: String
-                                        if(flag)
+                                        if (flag)
                                             url = "Okay MIUI URL set!"
                                         else
                                             url = codexData.downloads.url

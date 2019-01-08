@@ -20,6 +20,8 @@
         app:srcCompat="@drawable/ic_launcher" />
 
     <TextView
+        android:id="@+id/nav_codex_textView"
+        style="@style/customfontstyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
@@ -27,9 +29,10 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/nav_ss_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/customfontstyle"
         android:text="Stable and Secured" />
 
 </LinearLayout>
