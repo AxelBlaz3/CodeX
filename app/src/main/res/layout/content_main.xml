@@ -82,11 +82,12 @@
                             android:id="@+id/codexinfo_xda_textView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
                             android:layout_marginBottom="16dp"
                             android:fontFamily="@font/googlesans_medium"
                             android:text="@string/codexinfo_xda"
                             android:textColor="#FFFFFF"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/xda_dev_textView"
                             app:layout_constraintStart_toStartOf="@+id/xda_dev_textView"
@@ -165,39 +166,26 @@
                             android:fontFamily="@font/googlesans_medium"
                             android:text="@string/device_info"
                             android:textColor="#FFFFFF"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
+                            android:textSize="20sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
-
-                        <View
-                            android:id="@+id/view"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:background="@color/divider"
-                            app:layout_constraintEnd_toEndOf="@+id/rominfo_textView"
-                            app:layout_constraintStart_toStartOf="@+id/rominfo_textView"
-                            app:layout_constraintTop_toBottomOf="@+id/rominfo_textView" />
 
 
                         <TextView
                             android:id="@+id/device_textView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
                             android:layout_marginTop="16dp"
                             android:drawableStart="@drawable/round_smartphone_white_24"
                             android:drawablePadding="10dp"
                             android:fontFamily="@font/googlesans_medium"
                             android:text="@string/device"
                             android:textColor="#FFFFFF"
+                            android:textSize="14sp"
                             app:layout_constraintEnd_toEndOf="@+id/rominfo_textView"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/view" />
+                            app:layout_constraintStart_toStartOf="@+id/rominfo_textView"
+                            app:layout_constraintTop_toBottomOf="@+id/rominfo_textView" />
 
                         <TextView
                             android:id="@+id/model_textView"
@@ -286,11 +274,12 @@
                             android:id="@+id/direct_support_info_textView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
                             android:layout_marginBottom="16dp"
                             android:fontFamily="@font/googlesans_medium"
                             android:text="@string/direct_support_info"
                             android:textColor="#FFFFFF"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/direct_support_textView"
                             app:layout_constraintStart_toStartOf="@+id/direct_support_textView"
