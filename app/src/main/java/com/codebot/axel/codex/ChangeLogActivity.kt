@@ -25,9 +25,6 @@ class ChangeLogActivity : AppCompatActivity() {
         setContentView(R.layout.activity_change_log)
 
         pref = getSharedPreferences(getString(R.string.key_custom_pref), Context.MODE_PRIVATE)
-        setSupportActionBar(toolbar1)
-        appBar1.bringToFront()
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         changelog_progressBar.isIndeterminate = true
         changelog_progressBar.visibility = View.VISIBLE

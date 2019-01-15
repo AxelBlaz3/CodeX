@@ -26,8 +26,6 @@ class FlashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_flash)
 
-        setSupportActionBar(toolbar1)
-        appBar1.bringToFront()
         progressBar.isIndeterminate = true
         progressBar.visibility = View.VISIBLE
         if (!isNetworkAvailable())

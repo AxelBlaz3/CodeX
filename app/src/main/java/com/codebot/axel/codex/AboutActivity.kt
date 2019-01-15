@@ -31,9 +31,6 @@ class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
-        setSupportActionBar(toolbar2)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        appBar2.bringToFront()
 
         about_logo.scaleType = ImageView.ScaleType.FIT_XY
         context = this
@@ -50,7 +47,7 @@ class AboutActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val menuInflater = getMenuInflater()
+        val menuInflater = menuInflater
         menuInflater.inflate(R.menu.about_items, menu)
         return true
     }
