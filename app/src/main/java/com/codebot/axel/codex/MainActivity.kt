@@ -27,6 +27,7 @@ import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -116,6 +117,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             updates_layout.setOnClickListener {
                 val mySnackbar = Snackbar.make(findViewById(R.id.home_coordinatorLayout), "Checking for kernel updates", Snackbar.LENGTH_LONG)
                 mySnackbar.view.setBackgroundColor(getColor(R.color.background))
+                val textView = mySnackbar.view.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+                textView.setTextColor(resources.getColor(R.color.white))
                 mySnackbar.show()
                 checkForUpdates(this)
             }
@@ -381,7 +384,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         builder.setSmallIcon(R.mipmap.ic_notify)
         builder.setContentTitle("Kernel Update Available!")
         builder.setContentText("Tap here to open the app and download the update")
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        builder.priority = NotificationCompat.PRIORITY_DEFAULT
         builder.setContentIntent(pendingIntent)
         builder.setAutoCancel(true)
         val notificationChannel = NotificationChannel("1", "name", NotificationManager.IMPORTANCE_DEFAULT)
