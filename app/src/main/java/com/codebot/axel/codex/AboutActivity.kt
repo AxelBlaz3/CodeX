@@ -40,7 +40,7 @@ class AboutActivity : AppCompatActivity() {
 
         about_app_ver_textView.text = Html.fromHtml("<b>${getString(R.string.app_version)}</b>" + " $APP_VERSION")
 
-        about_github.setOnClickListener {
+        forkLayout.setOnClickListener {
             val githubIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.github.com/AxelBlaz3"))
             startActivity(githubIntent)
         }
