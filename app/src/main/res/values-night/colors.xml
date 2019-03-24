@@ -9,7 +9,7 @@
     <color name="black">#212121</color>
     <color name="divider">#DCDCDC</color>
     <color name="background">#1a2237</color>
-    <color name="kinda_teal">#109b98</color>
+    <color name="green">#40D7AB</color>
     <color name="white">#FFFFFF</color>
     <color name="navIconTint">@android:color/white</color>
 </resources>

@@ -53,6 +53,11 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         flag = false
 
+        if (Utils().isNetworkAvailable(context)) {
+            Utils().startRefreshAnimation(context, animation)
+            fetchJSON(animation, CHECK_FOR_UPDATES)
+        }
+
         onDownloadComplete = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 //Fetching the download id received with the broadcast
@@ -234,6 +239,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         CHECK_FOR_UPDATES -> {
                             runOnUiThread {
+                                latest_version_textView.text = codexData!!.downloads.ver
                                 checkForUpdates(codexData)
                             }
                         }

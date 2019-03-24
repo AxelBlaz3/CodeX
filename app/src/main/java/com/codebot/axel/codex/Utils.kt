@@ -134,9 +134,13 @@ class Utils {
                 Toast.makeText(context, "Version verificaton is unsupported", Toast.LENGTH_SHORT).show()
             }
             codexData!!.downloads.ver.toDouble() > currentVersion.toDouble() -> {
+                (context as Activity).update_notify_textView.setTextColor(context.resources.getColor(R.color.colorAccent))
+                context.update_notify_textView.text = "An update is available!"
                 Toast.makeText(context, "Update available", Toast.LENGTH_SHORT).show()
             }
             else -> {
+                (context as Activity).update_notify_textView.setTextColor(context.resources.getColor(R.color.green))
+                context.update_notify_textView.text = "You're up to date."
                 Toast.makeText(context, "You're up to date!", Toast.LENGTH_SHORT).show()
             }
         }

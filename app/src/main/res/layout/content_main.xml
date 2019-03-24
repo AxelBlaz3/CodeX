@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="v1.0"
+                android:text="-"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/latest_textView"
                 app:layout_constraintTop_toTopOf="@+id/latest_textView" />
@@ -76,7 +76,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="No update available"
+                android:text="Can't verify for update."
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/latest_textView"
                 app:layout_constraintTop_toBottomOf="@+id/latest_textView" />
