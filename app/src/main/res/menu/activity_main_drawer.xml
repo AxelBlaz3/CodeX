@@ -4,24 +4,11 @@
     tools:showIn="navigation_view">
 
     <item
-        android:id="@+id/nav_changelog"
-        android:icon="@drawable/outline_format_list_bulleted_black_24"
-        android:title="@string/changelog" />
-    <item
-        android:id="@+id/nav_downloads"
-        android:icon="@drawable/outline_get_app_black_24"
-        android:title="@string/downloads" />
-
-    <item
-        android:id="@+id/nav_flash"
-        android:icon="@drawable/outline_flash_on_black_24"
-        android:title="@string/flash" />
-    <item
         android:id="@+id/nav_settings"
-        android:icon="@drawable/outline_settings_black_24"
+        android:icon="@drawable/ic_settings"
         android:title="@string/settings" />
     <item
         android:id="@+id/nav_about"
-        android:icon="@drawable/outline_info_black_24"
+        android:icon="@drawable/ic_info"
         android:title="@string/about" />
 </menu>

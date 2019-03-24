@@ -17,7 +17,7 @@
     <string name="model">Model:</string>
     <string name="kernel">Kernel:</string>
     <string name="about_kernel">CodeX makes your device even snappier than before. Being a battery and performance balanced kernel it never compromises on stability. You know why? Cause your device deserves it!</string>
-    <string name="fork_github">Fork my source on GitHub:</string>
+    <string name="fork_github">Fork my source on GitHub</string>
     <string name="app_version">App Version:</string>
     <string name="xda_developers">XDA Developers</string>
     <string name="codexinfo_xda">CodeX Kernel thread on XDA forums for your device. General discussions, support and FAQs</string>
@@ -33,8 +33,6 @@
     <string name="key_auto_updates">auto_updates</string>
     <string name="key_notification_check">Notify</string>
     <string name="key_miui_check">MIUI</string>
-    <string name="save_response_preference">Saved_response</string>
-    <string name="responce_string">response_string</string>
 
     <!-- Strings related to Settings -->
     <string name="new_updates">Check Updates</string>

@@ -5,11 +5,10 @@
     android:layout_height="@dimen/nav_header_height"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:background="#1C2238"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:theme="@style/AppTheme">
 
     <ImageView
@@ -21,21 +20,17 @@
 
     <TextView
         android:id="@+id/nav_codex_textView"
-        style="@style/customfontstyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/app_name"
-        android:textSize="16sp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/nav_ss_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/customfontstyle"
-        android:textColor="#FFFFFF"
         android:text="Stable and Secured" />
 
 </LinearLayout>

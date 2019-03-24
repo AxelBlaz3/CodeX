@@ -1,33 +1,23 @@
 package com.codebot.axel.codex
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
-import android.content.SharedPreferences
+import android.app.DownloadManager
+import android.content.*
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.NotificationCompat
 import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.text.Html
-import android.util.Log
-import android.view.ContextThemeWrapper
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
+import android.widget.Toast
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -36,103 +26,126 @@ import okhttp3.*
 import java.io.IOException
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
-    val KERNEL = "CodeX"
-    val KERNEL_VERSION_FULL = System.getProperty("os.version")
-    val KERNEL_VERSION = KERNEL_VERSION_FULL.substring(KERNEL_VERSION_FULL.lastIndexOf('-') + 1, KERNEL_VERSION_FULL.length)
-    var URL = "https://raw.githubusercontent.com/AxelBlaz3/Codex-Kernel/gh-test/whyred.json"
-    lateinit var preferences: SharedPreferences
-    lateinit var pref: SharedPreferences
+    private val KERNEL_VERSION_FULL = System.getProperty("os.version")
+    private val KERNEL_VERSION = KERNEL_VERSION_FULL.substring(KERNEL_VERSION_FULL.lastIndexOf('-') + 1, KERNEL_VERSION_FULL.length)
+    private var codexJSONUrl = "https://raw.githubusercontent.com/AxelBlaz3/Codex-Kernel/gh-pages/whyred.json"
+    private lateinit var preferences: SharedPreferences
     val context = this
-    var flag = false
+    private var flag = false
+    private var codexData: CodexInfo? = null
+    var navIdHolder: Int = 0
+    private var downloadId: Long = 0
+    private lateinit var onDownloadComplete: BroadcastReceiver
+    private val animation = RotateAnimation(0.0f, 360.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+
+    companion object {
+        const val CHECK_FOR_UPDATES = "Check For Updates"
+        const val DOWNLOAD = "Download"
+        const val FLASH = "Flash"
+        const val CHANGELOG = "Changelog"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        appBar.bringToFront()
-        TypefaceUtil.overrideFont(applicationContext, "SERIF", "fonts/googlesans_medium.ttf") // font from assets: "assets/fonts/Roboto-Regular.ttf
         flag = false
-        pref = getSharedPreferences(getString(R.string.key_notification_check), Context.MODE_PRIVATE)
-        val editor = pref.edit()
-        editor.putString("notification", "0")
-        editor.apply()
 
-        progressBar2.visibility = View.INVISIBLE
-        logo_imageView.scaleType = ImageView.ScaleType.FIT_XY
+        onDownloadComplete = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                //Fetching the download id received with the broadcast
+                val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
 
+                //Checking if the received broadcast is for our enqueued download by matching download id
+                if (downloadId == id) {
+                    Toast.makeText(context, "Build downloaded successfully", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        registerReceiver(onDownloadComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+        // Toast.makeText(this, context.packageManager.getPackageInfo(context.packageName, 0).versionName, Toast.LENGTH_SHORT).show()
+        if (!Utils().isNetworkAvailable(context)) {
+            Utils().noNetworkDialog(context)
+        }
         // Verifies if CodeX is absent on the device
         if (KERNEL_VERSION_FULL.contains("CodeX")) {
             alertUser()
         } else {
-            // Runtime.getRuntime().exec("su")
             preferences = PreferenceManager.getDefaultSharedPreferences(this)
 
             if (preferences.getBoolean(getString(R.string.key_miui_check), false))
                 flag = true
-            Log.e("flag: ", "$flag")
+
             isStoragePermissionGranted()
-            device_textView.text = Html.fromHtml("<b>" + getString(R.string.device) + "</b>" + " " + Build.DEVICE)
-            model_textView.text = Html.fromHtml("<b>" + getString(R.string.model) + "</b>" + " " + Build.MODEL)
-            kernel_textView.text = Html.fromHtml("<b>" + getString(R.string.kernel) + "</b>" + " " + "CodeX" + " " + KERNEL_VERSION)
 
-            val toggle = ActionBarDrawerToggle(
-                    this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-            drawer_layout.addDrawerListener(toggle)
-            toggle.syncState()
+            Utils().showDeviceInfo(context, KERNEL_VERSION)
 
-            nav_view.setNavigationItemSelectedListener(this)
-
-            val autoUpdates = preferences.getBoolean(getString(R.string.key_auto_updates), false)
-
-            if (preferences.getBoolean(getString(R.string.key_check_updates), true))
-                checkForUpdates(this)
-
-            if (autoUpdates) {
-                val client = OkHttpClient()
-                val request = Request.Builder().url(URL).build()
-                client.newCall(request).enqueue(object : Callback {
-                    override fun onFailure(call: Call?, e: IOException?) {
-                        e!!.printStackTrace()
-                    }
-
-                    override fun onResponse(call: Call?, response: Response?) {
-                        val bodyOfJSON = response?.body()?.string()
-                        val gson = GsonBuilder().create()
-                        val codexData = gson.fromJson(bodyOfJSON, CodexInfo::class.java)
-                        val url: String
-                        if (flag)
-                            url = "Okay MIUI URL set!"
-                        else
-                            url = codexData.downloads.url
-                        Log.d("Download URL: ", url)
-                        runOnUiThread {
-                            DownloadTask(context, url, autoUpdates, progressBar2, percentage_textView)
-                        }
-                    }
-                })
-            }
-
-            updates_layout.setOnClickListener {
-                val mySnackbar = Snackbar.make(findViewById(R.id.home_coordinatorLayout), "Checking for kernel updates", Snackbar.LENGTH_LONG)
-                mySnackbar.view.setBackgroundColor(getColor(R.color.background))
-                val textView = mySnackbar.view.findViewById<TextView>(android.support.design.R.id.snackbar_text)
-                textView.setTextColor(resources.getColor(R.color.white))
-                mySnackbar.show()
-                checkForUpdates(this)
-            }
-
-            xda_constraint_layout.setOnClickListener {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forum.xda-developers.com/redmi-note-5-pro/development/kernel-codex-kernel-v1-0-t3805198"))
-                startActivity(browserIntent)
-            }
-
-            telegram_constraint_layout.setOnClickListener {
-                val telegramIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/AxelBlaz3"))
-                startActivity(telegramIntent)
-            }
+            toggleDrawer()
         }
+
+        changelog_button.setOnClickListener {
+            fetchJSON(animation, CHANGELOG)
+        }
+
+        download_zip_button.setOnClickListener {
+            fetchJSON(animation, DOWNLOAD)
+        }
+
+        flash_kernel_button.setOnClickListener {
+            fetchJSON(animation, FLASH)
+        }
+
+        check_updates_imageView.setOnClickListener {
+            Utils().startRefreshAnimation(context, animation)
+            fetchJSON(animation, CHECK_FOR_UPDATES)
+        }
+
+        nav_view.setNavigationItemSelectedListener(object : NavigationView.OnNavigationItemSelectedListener {
+            override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.nav_settings -> {
+                        navIdHolder = R.id.nav_settings
+                    }
+                    R.id.nav_about -> {
+                        navIdHolder = R.id.nav_about
+                    }
+                }
+                drawer_layout.closeDrawer(Gravity.START)
+                return true
+            }
+        })
+
+        drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(p0: Int) {}
+
+            override fun onDrawerSlide(p0: View, p1: Float) {}
+
+            override fun onDrawerClosed(p0: View) {
+                when (navIdHolder) {
+                    R.id.nav_settings -> {
+                        navIdHolder = 0
+                        val settingsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
+                        startActivity(settingsIntent)
+                    }
+                    R.id.nav_about -> {
+                        navIdHolder = 0
+                        Utils().showAboutDialog(this@MainActivity)
+                    }
+                }
+            }
+
+            override fun onDrawerOpened(p0: View) {}
+        })
+    }
+
+    private fun toggleDrawer() {
+        val toggle = ActionBarDrawerToggle(
+                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
     }
 
     override fun onBackPressed() {
@@ -143,182 +156,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_downloads -> {
-                if (isNetworkAvailable()) {
-                    val client = OkHttpClient()
-                    val request = Request.Builder().url(URL).build()
-                    client.newCall(request).enqueue(object : Callback {
-                        override fun onFailure(call: Call?, e: IOException?) {
-                            e!!.printStackTrace()
-                        }
-
-                        override fun onResponse(call: Call?, response: Response?) {
-                            val bodyOfJSON = response?.body()?.string()
-                            val gson = GsonBuilder().create()
-                            val codexData = gson.fromJson(bodyOfJSON, CodexInfo::class.java)
-                            val url: String
-                            if (flag)
-                                url = "Okay MIUI URL set!"
-                            else
-                                url = codexData.downloads.url
-                            runOnUiThread {
-                                DownloadTask(context, url, false, progressBar2, percentage_textView)
-                            }
-                        }
-                    })
-                } else
-                    promptNoNetwork(context)
-            }
-            R.id.nav_settings -> {
-                val settings_intent = Intent(this, SettingsActivity::class.java)
-                startActivity(settings_intent)
-            }
-            R.id.nav_flash -> {
-                val flash_intent = Intent(this, FlashActivity::class.java)
-                startActivity(flash_intent)
-            }
-            R.id.nav_about -> {
-                val about_intent = Intent(this, AboutActivity::class.java)
-                startActivity(about_intent)
-            }
-            R.id.nav_changelog -> {
-                val changeLog_intent = Intent(this, ChangeLogActivity::class.java)
-                startActivity(changeLog_intent)
-            }
-        }
-
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
+    private fun alertUser() {
+        val title = "CodeX not found!"
+        val message = "Sorry, this app is exclusively made to work with CodeX kernel"
+        val buttonText = "OK"
+        val finishActivity = true
+        Utils().showAlertDialog(context, title, message, buttonText, finishActivity)
     }
 
-    fun alertUser() {
-        val dialogClickListener = DialogInterface.OnClickListener { dialog, which ->
-            when (which) {
-                DialogInterface.BUTTON_NEGATIVE -> {
-                    finish()
-                }
-            }
-        }
-
-        val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AlertDialogTheme))
-
-        builder.setTitle("CodeX not found!")
-                .setMessage("Sorry, this app is exclusively made to work with CodeX kernel")
-                .setNegativeButton("Exit", dialogClickListener)
-                .setCancelable(false)
-                .show()
-    }
-
-    fun checkForUpdates(context: Context) {
-        println("URL: " + URL)
-        if (isNetworkAvailable()) {
+    fun checkForUpdates(codexData: CodexInfo?) {
+        println("codexJSONUrl: $codexJSONUrl")
+        if (Utils().isNetworkAvailable(context)) {
             if (preferences.getBoolean(getString(R.string.key_wifi_only), false)) {
                 if (isWifi()) {
-                    val client = OkHttpClient()
-                    val request = Request.Builder().url(URL).build()
-                    client.newCall(request).enqueue(object : Callback {
-                        override fun onFailure(call: Call?, e: IOException?) {
-                            e!!.printStackTrace()
-                        }
-
-                        override fun onResponse(call: Call?, response: Response?) {
-                            val bodyOfJSON = response?.body()?.string()
-                            val gson = GsonBuilder().create()
-                            val codexData = gson.fromJson(bodyOfJSON, CodexInfo::class.java)
-                            val version = codexData.downloads.ver
-                            verifyUpdate(version, context)
-                        }
-                    })
+                    Utils().isUpdateAvailable(context, codexData, KERNEL_VERSION_FULL, animation)
                 } else
                     alertUserForWifi()
-            } else {
-                val client = OkHttpClient()
-                val request = Request.Builder().url(URL).build()
-                client.newCall(request).enqueue(object : Callback {
-                    override fun onFailure(call: Call?, e: IOException?) {
-                        e!!.printStackTrace()
-                    }
-
-                    override fun onResponse(call: Call?, response: Response?) {
-                        val bodyOfJSON = response?.body()?.string()
-                        val gson = GsonBuilder().create()
-                        val codexData = gson.fromJson(bodyOfJSON, CodexInfo::class.java)
-                        val version = codexData.downloads.ver
-                        verifyUpdate(version, context)
-                    }
-                })
-            }
+            } else
+                Utils().isUpdateAvailable(context, codexData, KERNEL_VERSION_FULL, animation)
         } else
-            promptNoNetwork(context)
+            Utils().noNetworkDialog(context)
     }
 
-
-    fun verifyUpdate(version: String, context: Context) {
-        var currentVersion = KERNEL_VERSION_FULL.substring(KERNEL_VERSION_FULL.lastIndexOf('-') + 1, KERNEL_VERSION_FULL.length)
-        // Remove 'v' from versions to compare!
-        currentVersion = currentVersion.substring(1, currentVersion.length)
-        Log.d("currentVersion: ", currentVersion)
-        val remoteVersion = version.substring(1, version.length)
-        Log.d("remoteVersion: ", remoteVersion)
-        if (/*currentVersion.toDouble()*/1.2 < remoteVersion.toDouble()) {
-            runOnUiThread {
-                if (pref.getString("notification", "0").equals("0"))
-                    updateNotification()
-                val dialogListener = DialogInterface.OnClickListener { dialog, which ->
-                    when (which) {
-                        DialogInterface.BUTTON_POSITIVE -> {
-                            runOnUiThread {
-                                val client = OkHttpClient()
-                                val request = Request.Builder().url(URL).build()
-                                client.newCall(request).enqueue(object : Callback {
-                                    override fun onFailure(call: Call?, e: IOException?) {
-                                        e!!.printStackTrace()
-                                    }
-
-                                    override fun onResponse(call: Call?, response: Response?) {
-                                        val bodyOfJSON = response?.body()?.string()
-                                        val gson = GsonBuilder().create()
-                                        val codexData = gson.fromJson(bodyOfJSON, CodexInfo::class.java)
-                                        val url: String
-                                        if (flag)
-                                            url = "Okay MIUI URL set!"
-                                        else
-                                            url = codexData.downloads.url
-                                        runOnUiThread {
-                                            DownloadTask(context, url, false, progressBar2, percentage_textView)
-                                        }
-                                    }
-                                })
-
-                            }
-                        }
-                        DialogInterface.BUTTON_NEGATIVE -> {
-                            dialog.dismiss()
-                        }
-                    }
-                }
-
-                val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AlertDialogTheme))
-                builder.setTitle("Update Available")
-                        .setMessage("Download update now?")
-                        .setPositiveButton("Yes", dialogListener)
-                        .setNegativeButton("Later", dialogListener)
-                        .show()
-
-            }
-        } else {
-            runOnUiThread {
-                val mySnackbar = Snackbar.make(findViewById(R.id.home_coordinatorLayout), "No Update available", Snackbar.LENGTH_LONG)
-                mySnackbar.view.setBackgroundColor(getColor(R.color.background))
-                mySnackbar.show()
-            }
-        }
-    }
-
-    fun isWifi(): Boolean {
+    private fun isWifi(): Boolean {
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val mWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
         if (mWifi.isConnected)
@@ -326,46 +186,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return false
     }
 
-    fun alertUserForWifi() {
-        val dialogListener = DialogInterface.OnClickListener { dialog, which ->
-            when (which) {
-                DialogInterface.BUTTON_POSITIVE -> {
-                    dialog.dismiss()
-                }
-            }
-        }
-
-        val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AlertDialogTheme))
-        builder.setMessage("You're not on Wi-Fi. Please change the settings of restrict mobile data")
-                .setPositiveButton("Ok", dialogListener)
-                .show()
+    private fun alertUserForWifi() {
+        val title = "No Wi-Fi Network"
+        val message = "You're not on Wi-Fi. Please change the settings of restrict mobile data"
+        val buttonText = "OK"
+        val finishActivity = false
+        Utils().showAlertDialog(context, title, message, buttonText, finishActivity)
     }
 
-    fun isNetworkAvailable(): Boolean {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
-    }
-
-    fun promptNoNetwork(context: Context) {
-        val dialogClickListener = DialogInterface.OnClickListener { dialog, which ->
-            when (which) {
-                DialogInterface.BUTTON_NEGATIVE -> {
-                    dialog.dismiss()
-                }
-            }
-        }
-
-        val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AlertDialogTheme))
-
-        builder.setTitle("No Internet!")
-                .setMessage("Please check your network connection and try again")
-                .setNegativeButton("Ok", dialogClickListener)
-                .setCancelable(false)
-                .show()
-    }
-
-    fun isStoragePermissionGranted(): Boolean {
+    private fun isStoragePermissionGranted(): Boolean {
         if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             return true
         else {
@@ -374,35 +203,53 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    fun updateNotification() {
+    private fun fetchJSON(animation: RotateAnimation, currentTask: String) {
+        if (!Utils().isNetworkAvailable(context)) {
+            Utils().noNetworkDialog(context)
+            Utils().stopRefreshAnimation(animation)
+        } else {
+            val client = OkHttpClient()
+            val request = Request.Builder().url(codexJSONUrl).build()
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call?, e: IOException?) {
+                    e!!.printStackTrace()
+                }
 
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+                override fun onResponse(call: Call?, response: Response?) {
+                    val bodyOfJSON = response?.body()?.string()
+                    Utils().saveJSONtoPreferences(context, bodyOfJSON)
+                    val gson = GsonBuilder().create()
+                    codexData = gson.fromJson(bodyOfJSON, CodexInfo::class.java)
 
-        val builder = NotificationCompat.Builder(this, "1")
-        builder.setSmallIcon(R.mipmap.ic_notify)
-        builder.setContentTitle("Kernel Update Available!")
-        builder.setContentText("Tap here to open the app and download the update")
-        builder.priority = NotificationCompat.PRIORITY_DEFAULT
-        builder.setContentIntent(pendingIntent)
-        builder.setAutoCancel(true)
-        val notificationChannel = NotificationChannel("1", "name", NotificationManager.IMPORTANCE_DEFAULT)
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(notificationChannel)
-        notificationManager.notify(1, builder.build())
-
-        val editor = pref.edit()
-        editor.putString("notification", "1")
-        editor.apply()
+                    when (currentTask) {
+                        DOWNLOAD -> {
+                            runOnUiThread {
+                                downloadId = Utils().downloadPackage(context, codexData)
+                            }
+                        }
+                        FLASH -> {
+                            runOnUiThread {
+                                Utils().rebootAndFlashPackage(context, codexData)
+                            }
+                        }
+                        CHECK_FOR_UPDATES -> {
+                            runOnUiThread {
+                                checkForUpdates(codexData)
+                            }
+                        }
+                        CHANGELOG -> {
+                            val intent = Intent(this@MainActivity, ChangeLogActivity::class.java)
+                            intent.putExtra("codexData", codexData)
+                            startActivity(intent)
+                        }
+                    }
+                }
+            })
+        }
     }
 
     override fun onDestroy() {
-        val editor = pref.edit()
-        editor.putString("notification", "0")
-        editor.apply()
         super.onDestroy()
+        unregisterReceiver(onDownloadComplete)
     }
 }
-
-

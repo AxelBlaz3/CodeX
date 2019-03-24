@@ -1,5 +1,7 @@
 package com.codebot.axel.codex
 
+import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.view.LayoutInflater
@@ -7,16 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_change_log_items.view.*
 
-class ChangeLogAdapter(codexInfo: CodexInfo) : RecyclerView.Adapter<ChangeLogViewHolder>() {
+class ChangeLogAdapter(val context: Context, codexInfo: CodexInfo) : RecyclerView.Adapter<ChangeLogViewHolder>() {
 
-    var changeLog: ArrayList<String> = ArrayList()
-    val sizeOfChangelog = codexInfo.changelog.size
+    private var changeLog: ArrayList<String> = ArrayList()
+    private val sizeOfChangelog = codexInfo.changelog.size
 
     init {
-        for (i in 0..sizeOfChangelog - 1) {
-            val sizeOfArray = codexInfo.changelog.get(i).added.size
-            val currentChangelog = codexInfo.changelog.get(i).added
-            for (j in 0..sizeOfArray - 1) {
+        for (i in 0 until sizeOfChangelog) {
+            val sizeOfArray = codexInfo.changelog[i].added.size
+            val currentChangelog = codexInfo.changelog[i].added
+            for (j in 0 until sizeOfArray) {
                 changeLog.add(currentChangelog[j])
             }
         }
@@ -30,7 +32,7 @@ class ChangeLogAdapter(codexInfo: CodexInfo) : RecyclerView.Adapter<ChangeLogVie
 
     override fun onBindViewHolder(holder: ChangeLogViewHolder, position: Int) {
         if (changeLog[position].contains("Version", false)) {
-            val string = Html.fromHtml("<h2>" + "<font color=#109B98>" + changeLog[position] + "</font></h2>").trim()
+            val string = Html.fromHtml("<h2>" + "<font color=${ContextCompat.getColor(context, R.color.colorAccent)}>" + changeLog[position] + "</font></h2>").trim()
             holder.view.changelog_bullet_textView.visibility = View.GONE
             holder.view.changelog_added_textView.text = string
         } else

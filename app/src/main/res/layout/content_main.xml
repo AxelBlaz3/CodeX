@@ -6,323 +6,238 @@
     android:id="@+id/home_coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.codebot.axel.codex.MainActivity"
         tools:showIn="@layout/app_bar_main">
 
-        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/layout_background"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/installed_textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Installed:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="#424961"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    app:layout_constraintEnd_toEndOf="@+id/cardView"
-                    app:layout_constraintStart_toStartOf="@+id/cardView"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView">
+            <TextView
+                android:id="@+id/current_version_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="v1.0"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/installed_textView"
+                app:layout_constraintTop_toTopOf="@+id/installed_textView" />
 
-                    <android.support.constraint.ConstraintLayout
-                        android:id="@+id/xda_constraint_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#FFFFFF"
-                        android:clickable="true"
-                        android:foreground="?android:attr/selectableItemBackground">
+            <TextView
+                android:id="@+id/latest_textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Latest:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/installed_textView"
+                app:layout_constraintTop_toBottomOf="@+id/installed_textView" />
 
-                        <ImageView
-                            android:id="@+id/xda_round_imageView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/codexinfo_xda_textView"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/xda_dev_textView"
-                            app:srcCompat="@mipmap/ic_xda_round" />
+            <TextView
+                android:id="@+id/latest_version_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="v1.0"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/latest_textView"
+                app:layout_constraintTop_toTopOf="@+id/latest_textView" />
 
-                        <TextView
-                            android:id="@+id/xda_dev_textView"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="24dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="8dp"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:text="@string/xda_developers"
-                            android:textColor="#212121"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/xda_round_imageView"
-                            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/update_notify_textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="No update available"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/latest_textView"
+                app:layout_constraintTop_toBottomOf="@+id/latest_textView" />
 
-                        <TextView
-                            android:id="@+id/codexinfo_xda_textView"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="16dp"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:text="@string/codexinfo_xda"
-                            android:textColor="#212121"
-                            android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/xda_dev_textView"
-                            app:layout_constraintStart_toStartOf="@+id/xda_dev_textView"
-                            app:layout_constraintTop_toBottomOf="@+id/xda_dev_textView" />
-                    </android.support.constraint.ConstraintLayout>
-                </android.support.v7.widget.CardView>
+            <Button
+                android:id="@+id/download_zip_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_background"
+                android:minHeight="40dp"
+                android:text="Download Zip"
+                app:layout_constraintStart_toStartOf="@+id/update_notify_textView"
+                app:layout_constraintTop_toBottomOf="@+id/update_notify_textView" />
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardView2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="#424961"
-                    android:clickable="true"
-                    android:elevation="4dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/logo_imageView">
+            <Button
+                android:id="@+id/flash_kernel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/button_background"
+                android:minHeight="40dp"
+                android:text="Flash Kernel"
+                app:layout_constraintStart_toEndOf="@+id/download_zip_button"
+                app:layout_constraintTop_toTopOf="@+id/download_zip_button" />
 
-                    <android.support.constraint.ConstraintLayout
-                        android:id="@+id/updates_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#FFFFFF"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground">
+            <Button
+                android:id="@+id/changelog_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_background"
+                android:minHeight="40dp"
+                android:text="Changelog"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/download_zip_button"
+                app:layout_constraintTop_toBottomOf="@+id/download_zip_button" />
 
-                        <TextView
-                            android:id="@+id/updates_check_textView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="16dp"
-                            android:drawableStart="@drawable/outline_system_update_black_24"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:text="@string/check_for_updates"
-                            android:textColor="#212121"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </android.support.constraint.ConstraintLayout>
-                </android.support.v7.widget.CardView>
+            <ImageView
+                android:id="@+id/check_updates_imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_check_updates" />
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="#424961"
-                    android:focusable="auto"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    app:layout_constraintEnd_toEndOf="@+id/cardView2"
-                    app:layout_constraintStart_toStartOf="@+id/cardView2"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView2">
+        </android.support.constraint.ConstraintLayout>
 
-                    <android.support.constraint.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#FFFFFF">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/layout_background"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-                        <TextView
-                            android:id="@+id/rominfo_textView"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:text="@string/device_info"
-                            android:textColor="#212121"
-                            android:textSize="20sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/device_header_textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Device Information"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/device_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Device:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/device_header_textView" />
 
-                        <TextView
-                            android:id="@+id/device_textView"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:drawableStart="@drawable/outline_info_black_18"
-                            android:drawablePadding="8dp"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:text="@string/device"
-                            android:textColor="#212121"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="@+id/rominfo_textView"
-                            app:layout_constraintStart_toStartOf="@+id/rominfo_textView"
-                            app:layout_constraintTop_toBottomOf="@+id/rominfo_textView" />
+            <TextView
+                android:id="@+id/device_desc_textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="TextView"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/device_header_textView"
+                app:layout_constraintStart_toEndOf="@+id/device_textView"
+                app:layout_constraintTop_toTopOf="@+id/device_textView" />
 
-                        <TextView
-                            android:id="@+id/model_textView"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:drawableStart="@drawable/outline_phone_android_black_18"
-                            android:drawablePadding="8dp"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:text="@string/model"
-                            android:textColor="#212121"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="@+id/device_textView"
-                            app:layout_constraintStart_toStartOf="@+id/device_textView"
-                            app:layout_constraintTop_toBottomOf="@+id/device_textView" />
+            <TextView
+                android:id="@+id/codename_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Codename:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/device_textView"
+                app:layout_constraintTop_toBottomOf="@+id/device_textView" />
 
-                        <TextView
-                            android:id="@+id/kernel_textView"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginBottom="8dp"
-                            android:drawableStart="@drawable/outline_memory_black_18"
-                            android:drawablePadding="8dp"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:text="@string/kernel"
-                            android:textColor="#212121"
-                            android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/model_textView"
-                            app:layout_constraintStart_toStartOf="@+id/model_textView"
-                            app:layout_constraintTop_toBottomOf="@+id/model_textView" />
+            <TextView
+                android:id="@+id/codename_desc_textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="TextView"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/device_desc_textView"
+                app:layout_constraintStart_toEndOf="@+id/codename_textView"
+                app:layout_constraintTop_toTopOf="@+id/codename_textView" />
 
-                    </android.support.constraint.ConstraintLayout>
-                </android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/androidversion_textVIew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Android:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/codename_textView"
+                app:layout_constraintTop_toBottomOf="@+id/codename_textView" />
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardView4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="#424961"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/cardView3"
-                    app:layout_constraintStart_toStartOf="@+id/cardView3"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView3">
+            <TextView
+                android:id="@+id/androidversion_desc_textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="@+id/codename_desc_textView"
+                app:layout_constraintStart_toEndOf="@+id/androidversion_textVIew"
+                app:layout_constraintTop_toTopOf="@+id/androidversion_textVIew" />
 
-                    <android.support.constraint.ConstraintLayout
-                        android:id="@+id/telegram_constraint_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#FFFFFF"
-                        android:clickable="true"
-                        android:foreground="?android:attr/selectableItemBackground">
+            <TextView
+                android:id="@+id/kernel_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Kernel:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/androidversion_textVIew"
+                app:layout_constraintTop_toBottomOf="@+id/androidversion_textVIew" />
 
-                        <ImageView
-                            android:id="@+id/telegram_imageView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/direct_support_info_textView"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/direct_support_textView"
-                            app:srcCompat="@mipmap/ic_telegram" />
-
-                        <TextView
-                            android:id="@+id/direct_support_textView"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="24dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="8dp"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:text="@string/direct_support"
-                            android:textColor="#212121"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/telegram_imageView"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/direct_support_info_textView"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="16dp"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:text="@string/direct_support_info"
-                            android:textColor="#212121"
-                            android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/direct_support_textView"
-                            app:layout_constraintStart_toStartOf="@+id/direct_support_textView"
-                            app:layout_constraintTop_toBottomOf="@+id/direct_support_textView" />
-                    </android.support.constraint.ConstraintLayout>
-                </android.support.v7.widget.CardView>
-
-                <ImageView
-                    android:id="@+id/logo_imageView"
-                    android:layout_width="0dp"
-                    android:layout_height="144dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/logo" />
-
-                <ProgressBar
-                    android:id="@+id/progressBar2"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:indeterminate="false"
-                    android:max="100"
-                    android:progressTint="@color/kinda_teal"
-                    app:layout_constraintBottom_toTopOf="@+id/cardView2"
-                    app:layout_constraintEnd_toStartOf="@+id/percentage_textView"
-                    app:layout_constraintStart_toStartOf="@+id/cardView2" />
-
-                <TextView
-                    android:id="@+id/percentage_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:textColor="#FFFFFF"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/logo_imageView"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-            </android.support.constraint.ConstraintLayout>
-        </ScrollView>
+            <TextView
+                android:id="@+id/kernel_desc_textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="TextView"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/androidversion_desc_textView"
+                app:layout_constraintStart_toEndOf="@+id/kernel_textView"
+                app:layout_constraintTop_toTopOf="@+id/kernel_textView" />
+        </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>
