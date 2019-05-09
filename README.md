@@ -8,16 +8,4 @@ CodeX manager is mainly designed to provide a **hassle free experience** for use
 * Supports both AOSP/LOS and MIUI downloads
 
 # Screenshots (Taken in development stage)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-201922.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-201927.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-201933.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-201940.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-201944.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-201949.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-201955.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-202003.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-202010.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-202017.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-202028.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-202041.png)
-![image](https://raw.githubusercontent.com/AxelBlaz3/CodeX/master/Screenshots/Screenshot_20190509-202054.png)
+<img src="Screenshots/Screenshot_20190509-201922.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190509-201927.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190509-201933.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190509-201940.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190509-201944.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190509-201949.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190555-201927.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190509-202003.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190509-202010.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190509-202017.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190509-202028.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190509-202041.png" alt="Screenshot" height="400"/> <img src="Screenshots/Screenshot_20190509-202054.png" alt="Screenshot" height="400"/>
